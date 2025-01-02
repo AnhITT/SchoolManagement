@@ -1,0 +1,47 @@
+﻿@model SchoolManagement.Models.Student
+@{
+    ViewData["Title"] = "Chi tiết sinh viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item h5">
+            <a asp-controller="Student" asp-action="Manage">
+                <i class="fa-solid fa-user-graduate"></i> Quản lý sinh viên
+            </a>
+        </li>
+        <li class="breadcrumb-item h5">Chi tiết sinh viên</li>
+    </ol>
+</nav>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Thông tin sinh viên</h4>
+        <dl class="row">
+            <dt class="col-sm-3">Mã sinh viên</dt>
+            <dd class="col-sm-9">@Model.StudentCode</dd>
+
+            <dt class="col-sm-3">Họ và tên</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Ngày sinh</dt>
+            <dd class="col-sm-9">@Model.DateOfBirth.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Số điện thoại</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+
+            <dt class="col-sm-3">Lớp</dt>
+            <dd class="col-sm-9">@(Model.Class?.ClassName ?? "Chưa có lớp")</dd>
+        </dl>
+        <div class="d-flex justify-content-center align-items-center">
+            <a class="btn btn-dark" asp-action="Index">
+                <i class="fa-solid fa-chevron-left"></i> Quay lại
+            </a>
+            <a class="btn btn-primary m-3" asp-action="Update" asp-route-id="@Model.Id">
+                <i class="fas fa-edit"></i> Chỉnh sửa
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<SchoolManagement.Models.Student>
+@{
+    ViewData["Title"] = "Danh sách sinh viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section style="padding-top: 30px" class="content">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="text-center">Danh sách sinh viên</h2>
+            <div class="card-tools">
+                <a asp-controller="Student" asp-action="Create" class="btn btn-success">Thêm mới</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Họ và tên</th>
+                        <th>Lớp</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model)
+                    {
+                        <tr>
+                            <td>@student.StudentCode</td>
+                            <td>@student.FullName</td>
+                            <td>@(student.Class?.ClassName ?? "Chưa có lớp")</td>
+                            <td>@student.Email</td>
+                            <td>@student.Phone</td>
+                            <td>
+                                <a asp-action="Detail" asp-route-id="@student.Id" class="btn btn-info btn-sm">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                                <a asp-action="Update" asp-route-id="@student.Id" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm" 
+                                        onclick="showDeleteModal(@student.Id, '@student.FullName')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa sinh viên <span id="studentName" class="fw-bold"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <a id="deleteButton" href="" class="btn btn-danger">Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showDeleteModal(id, name) {
+            document.getElementById('studentName').textContent = name;
+            document.getElementById('deleteButton').href = '/Student/Delete/' + id;
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+    </script>
+}

@@ -1,25 +1,30 @@
-﻿using SchoolManagement.Data;
-using SchoolManagement.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Data;
+using SchoolManagement.Models;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace SchoolManagement.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
+        private readonly ILogger<HomeController> _logger;
 
-        public IActionResult Index(string term = "", int currentPage = 1)
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
+
+        public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Dashboard()
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
         {
-            ViewData["Title"] = "Dashboard";
-            return View();
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

@@ -1,0 +1,61 @@
+@model IEnumerable<SchoolManagement.Models.Session>
+@using SchoolManagement.Models
+@{
+    ViewData["Title"] = "Thời khóa biểu";
+    var subject = ViewBag.Subject as Subject;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Subject" asp-action="Index">Danh sách môn học</a></li>
+        <li class="breadcrumb-item active">@subject.SubjectName</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thời khóa biểu - @subject.SubjectName</h3>
+        <div class="card-tools">
+            <a asp-action="Create" asp-route-subjectId="@subject.Id" class="btn btn-success">
+                <i class="fas fa-plus"></i> Thêm buổi học
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Buổi học</th>
+                    <th>Ngày</th>
+                    <th>Thời gian</th>
+                    <th>Điểm danh</th>
+                    <th>Ghi chú</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var session in Model)
+                {
+                    <tr>
+                        <td>@session.SessionName</td>
+                        <td>@session.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@session.StartTime.ToString(@"hh\:mm") - @session.EndTime.ToString(@"hh\:mm")</td>
+                        <td>
+                            @{
+                                var total = session.Attendances?.Count ?? 0;
+                                var present = session.Attendances?.Count(a => a.IsPresent) ?? 0;
+                            }
+                            @present/@total
+                        </td>
+                        <td>@session.Description</td>
+                        <td>
+                            <a asp-action="Attendance" asp-route-id="@session.Id" class="btn btn-primary btn-sm">
+                                <i class="fas fa-clipboard-check"></i> Điểm danh
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 

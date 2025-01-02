@@ -1,0 +1,44 @@
+@model SchoolManagement.Models.User
+@{
+    ViewData["Title"] = "Chi tiết tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item h5">
+            <a asp-action="Index">
+                <i class="fas fa-users"></i> Quản lý tài khoản
+            </a>
+        </li>
+        <li class="breadcrumb-item h5">Chi tiết tài khoản</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Thông tin tài khoản</h4>
+        <dl class="row">
+            <dt class="col-sm-3">Tên đăng nhập</dt>
+            <dd class="col-sm-9">@Model.UserName</dd>
+
+            <dt class="col-sm-3">Họ tên</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Vai trò</dt>
+            <dd class="col-sm-9">@string.Join(", ", ViewBag.Roles)</dd>
+        </dl>
+
+        <div class="d-flex justify-content-center align-items-center">
+            <a class="btn btn-dark" asp-action="Index">
+                <i class="fa-solid fa-chevron-left"></i> Quay lại
+            </a>
+            <a class="btn btn-primary m-3" asp-action="Update" asp-route-id="@Model.Id">
+                <i class="fas fa-edit"></i> Chỉnh sửa
+            </a>
+        </div>
+    </div>
+</div> 

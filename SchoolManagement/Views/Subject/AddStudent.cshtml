@@ -1,0 +1,111 @@
+@model AddStudentToSubjectViewModel
+@using SchoolManagement.ViewModels
+@{
+    ViewData["Title"] = "Thêm sinh viên vào môn học";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Danh sách môn học</a></li>
+        <li class="breadcrumb-item"><a asp-action="Detail" asp-route-id="@Model.SubjectId">@Model.SubjectName</a></li>
+        <li class="breadcrumb-item active">Thêm sinh viên</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thêm sinh viên vào môn @Model.SubjectName</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="AddStudent" method="post">
+            <input type="hidden" asp-for="SubjectId" />
+            <input type="hidden" asp-for="SubjectName" />
+
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button type="button" class="btn btn-outline-primary" onclick="selectAll(true)">
+                            <i class="fas fa-check-square"></i> Chọn tất cả
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="selectAll(false)">
+                            <i class="fas fa-square"></i> Bỏ chọn tất cả
+                        </button>
+                    </div>
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm sinh viên...">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Chọn</th>
+                        <th>Mã SV</th>
+                        <th>Họ tên</th>
+                        <th>Lớp</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Students.Count; i++)
+                    {
+                        <tr class="student-row">
+                            <td>
+                                <input type="hidden" name="Students[@i].StudentId" value="@Model.Students[i].StudentId" />
+                                <input type="hidden" name="Students[@i].StudentCode" value="@Model.Students[i].StudentCode" />
+                                <input type="hidden" name="Students[@i].FullName" value="@Model.Students[i].FullName" />
+                                <input type="hidden" name="Students[@i].ClassName" value="@Model.Students[i].ClassName" />
+                                <input type="checkbox" class="form-check-input" 
+                                       name="Students[@i].IsSelected" 
+                                       value="true" 
+                                       @(Model.Students[i].IsRegistered ? "checked" : "") />
+                            </td>
+                            <td>@Model.Students[i].StudentCode</td>
+                            <td>@Model.Students[i].FullName</td>
+                            <td>@Model.Students[i].ClassName</td>
+                            <td>
+                                @if (Model.Students[i].IsRegistered)
+                                {
+                                    <span class="badge bg-success">Đã đăng ký</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Chưa đăng ký</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-center mt-3">
+                <a asp-action="Detail" asp-route-id="@Model.SubjectId" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Hủy
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Lưu thay đổi
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function selectAll(checked) {
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = checked);
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            document.querySelectorAll('.student-row').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+    </script>
+} 

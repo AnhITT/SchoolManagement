@@ -1,0 +1,308 @@
+@model Subject
+@{
+    ViewData["Title"] = "Chi tiết môn học";
+    var paginatedSessions = ViewBag.PaginatedSessions as PaginatedList<SessionViewModel>;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item h5">
+            <a asp-action="Index">
+                <i class="fas fa-book"></i> Quản lý môn học
+            </a>
+        </li>
+        <li class="breadcrumb-item h5">Chi tiết môn học</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <!-- Thông báo -->
+    <div class="col-12 mb-3">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
+
+    <!-- Thông tin môn học -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin môn học</h3>
+                <div class="card-tools">
+                    <a asp-action="AddStudent" asp-route-id="@Model.Id" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Thêm sinh viên
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Mã môn học</dt>
+                    <dd class="col-sm-8">@Model.SubjectCode</dd>
+
+                    <dt class="col-sm-4">Tên môn học</dt>
+                    <dd class="col-sm-8">@Model.SubjectName</dd>
+
+                    <dt class="col-sm-4">Mô tả</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+
+                    <dt class="col-sm-4">Số sinh viên</dt>
+                    <dd class="col-sm-8">@(Model.StudentSubjects?.Count ?? 0)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Danh sách buổi học -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Danh sách buổi học</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createSessionModal">
+                        <i class="fas fa-plus"></i> Thêm buổi học
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Buổi học</th>
+                            <th>Ngày</th>
+                            <th>Thời gian</th>
+                            <th>Trạng thái</th>
+                            <th>Điểm danh</th>
+                            <th>Ghi chú</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in paginatedSessions.Items)
+                        {
+                            <tr class="@(item.IsUpcoming ? "table-light" : item.IsPast ? "table-secondary" : "table-warning")">
+                                <td>@item.Session.SessionName</td>
+                                <td>
+                                    @item.Session.Date.ToString("dd/MM/yyyy")
+                                    @if (item.IsToday)
+                                    {
+                                        <span class="badge bg-warning">Hôm nay</span>
+                                    }
+                                </td>
+                                <td>@item.Session.StartTime.ToString(@"hh\:mm") - @item.Session.EndTime.ToString(@"hh\:mm")</td>
+                                <td>
+                                    @if (item.IsUpcoming)
+                                    {
+                                        <span class="badge bg-info">Sắp diễn ra</span>
+                                    }
+                                    else if (item.IsPast)
+                                    {
+                                        <span class="badge bg-secondary">Đã kết thúc</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Đang diễn ra</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsUpcoming)
+                                    {
+                                        <span class="text-muted">Chưa bắt đầu</span>
+                                    }
+                                    else
+                                    {
+                                        if (item.PresentCount == item.TotalStudents && item.TotalStudents > 0)
+                                        {
+                                            <span class="text-success">
+                                                <i class="fas fa-check-circle"></i> Đầy đủ (@item.TotalStudents/@item.TotalStudents)
+                                            </span>
+                                        }
+                                        else if (item.PresentCount == 0)
+                                        {
+                                            <span class="text-danger">
+                                                <i class="fas fa-times-circle"></i> Chưa điểm danh (0/@item.TotalStudents)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-warning">
+                                                <i class="fas fa-exclamation-circle"></i> Thiếu @(item.TotalStudents - item.PresentCount) sinh viên (@item.PresentCount/@item.TotalStudents)
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                                <td>@item.Session.Description</td>
+                                <td>
+                                    @if (!item.IsUpcoming)
+                                    {
+                                        <a asp-controller="Session" asp-action="Attendance" asp-route-id="@item.Session.Id" 
+                                           class="btn btn-primary btn-sm">
+                                            <i class="fas fa-clipboard-check"></i> Điểm danh
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-secondary btn-sm" disabled>
+                                            <i class="fas fa-clock"></i> Chưa đến giờ
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <!-- Phân trang -->
+                @if (paginatedSessions.TotalPages > 1)
+                {
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            Hiển thị @((paginatedSessions.PageIndex - 1) * 10 + 1) đến 
+                            @(Math.Min(paginatedSessions.PageIndex * 10, paginatedSessions.TotalItems)) 
+                            trong tổng số @paginatedSessions.TotalItems buổi học
+                        </div>
+                        <nav>
+                            <ul class="pagination mb-0">
+                                <li class="page-item @(!paginatedSessions.HasPreviousPage ? "disabled" : "")">
+                                    <a class="page-link" asp-route-page="@(paginatedSessions.PageIndex - 1)" asp-route-id="@Model.Id">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                                @for (int i = 1; i <= paginatedSessions.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == paginatedSessions.PageIndex ? "active" : "")">
+                                        <a class="page-link" asp-route-page="@i" asp-route-id="@Model.Id">@i</a>
+                                    </li>
+                                }
+                                <li class="page-item @(!paginatedSessions.HasNextPage ? "disabled" : "")">
+                                    <a class="page-link" asp-route-page="@(paginatedSessions.PageIndex + 1)" asp-route-id="@Model.Id">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thêm buổi học -->
+<div class="modal fade" id="createSessionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Session" asp-action="CreateMultiple" method="post" 
+                  onsubmit="return validateSessionForm()">
+                <input type="hidden" name="SubjectId" value="@Model.Id" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Tạo lịch học</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" name="StartDate" required>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Ngày kết thúc</label>
+                            <input type="date" class="form-control" name="EndDate" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label">Giờ bắt đầu</label>
+                            <input type="time" class="form-control" name="StartTime" required>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Giờ kết thúc</label>
+                            <input type="time" class="form-control" name="EndTime" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Các ngày trong tuần</label>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="WeekDays" value="1">
+                                    <label class="form-check-label">Thứ 2</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="WeekDays" value="2">
+                                    <label class="form-check-label">Thứ 3</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="WeekDays" value="3">
+                                    <label class="form-check-label">Thứ 4</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="WeekDays" value="4">
+                                    <label class="form-check-label">Thứ 5</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="WeekDays" value="5">
+                                    <label class="form-check-label">Thứ 6</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="WeekDays" value="6">
+                                    <label class="form-check-label">Thứ 7</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Tạo lịch học</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function validateSessionForm() {
+            var startDate = new Date(document.querySelector('input[name="StartDate"]').value);
+            var endDate = new Date(document.querySelector('input[name="EndDate"]').value);
+            var startTime = document.querySelector('input[name="StartTime"]').value;
+            var endTime = document.querySelector('input[name="EndTime"]').value;
+            var weekDays = document.querySelectorAll('input[name="WeekDays"]:checked');
+
+            if (startDate > endDate) {
+                alert('Ngày kết thúc phải sau ngày bắt đầu');
+                return false;
+            }
+
+            if (startTime >= endTime) {
+                alert('Giờ kết thúc phải sau giờ bắt đầu');
+                return false;
+            }
+
+            if (weekDays.length === 0) {
+                alert('Vui lòng chọn ít nhất một ngày trong tuần');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Set default dates
+        var today = new Date();
+        document.querySelector('input[name="StartDate"]').valueAsDate = today;
+        document.querySelector('input[name="EndDate"]').valueAsDate = new Date(today.setMonth(today.getMonth() + 4));
+    </script>
+} 

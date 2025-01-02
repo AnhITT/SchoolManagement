@@ -1,0 +1,96 @@
+﻿@model SchoolManagement.Models.Student
+@{
+    ViewData["Title"] = "Chỉnh sửa sinh viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item h5">
+            <a asp-controller="Student" asp-action="Index">
+                <i class="fa-solid fa-user-graduate"></i> Quản lý sinh viên
+            </a>
+        </li>
+        <li class="breadcrumb-item h5">Chỉnh sửa sinh viên</li>
+    </ol>
+</nav>
+<section class="bg-image">
+    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                    <div class="card" style="border-radius: 15px;">
+                        <div class="card-body p-5">
+                            <h2 class="text-uppercase text-center">Chỉnh sửa sinh viên</h2>
+
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                        {
+                                            <li>@modelError.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
+                            <form asp-action="Update" method="post">
+                                <input type="hidden" asp-for="Id" />
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="StudentCode">Mã sinh viên</label>
+                                    <input asp-for="StudentCode" class="form-control" />
+                                    <span asp-validation-for="StudentCode" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="FullName">Họ và tên</label>
+                                    <input asp-for="FullName" class="form-control" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="DateOfBirth">Ngày sinh</label>
+                                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="Email">Email</label>
+                                    <input asp-for="Email" type="email" class="form-control" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="Phone">Số điện thoại</label>
+                                    <input asp-for="Phone" class="form-control" />
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="ClassId">Lớp</label>
+                                    <select asp-for="ClassId" class="form-control" 
+                                            asp-items="@(new SelectList(ViewBag.Classes, "Id", "ClassName"))">
+                                        <option value="">-- Chọn lớp --</option>
+                                    </select>
+                                    <span asp-validation-for="ClassId" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a class="btn btn-dark" asp-action="Index">
+                                        <i class="fa-solid fa-chevron-left"></i> Quay lại
+                                    </a>
+                                    <input type="submit" value="Cập nhật" class="btn btn-primary m-3" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

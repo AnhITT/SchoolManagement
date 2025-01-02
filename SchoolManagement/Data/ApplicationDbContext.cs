@@ -35,6 +35,11 @@ namespace SchoolManagement.Data
                 .HasOne(ss => ss.Subject)
                 .WithMany(s => s.StudentSubjects)
                 .HasForeignKey(ss => ss.SubjectId);
+
+            // Thêm unique index cho StudentCode
+            modelBuilder.Entity<Student>()
+                .HasIndex(s => s.StudentCode)
+                .IsUnique();
         }
     }
 }

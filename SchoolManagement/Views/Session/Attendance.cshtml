@@ -1,0 +1,131 @@
+@model Session
+@{
+    ViewData["Title"] = "Điểm danh";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Subject" asp-action="Index">Danh sách môn học</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Subject" asp-action="Detail" asp-route-id="@Model.SubjectId">@Model.Subject.SubjectName</a></li>
+        <li class="breadcrumb-item active">Điểm danh buổi @Model.SessionName</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            Điểm danh buổi @Model.SessionName - @Model.Subject.SubjectName
+            <small class="text-muted">(@Model.Date.ToString("dd/MM/yyyy"))</small>
+        </h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="UpdateAttendance" method="post">
+            <input type="hidden" name="sessionId" value="@Model.Id" />
+            
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button type="button" class="btn btn-outline-primary" onclick="selectAll(true)">
+                            <i class="fas fa-check-square"></i> Có mặt tất cả
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="selectAll(false)">
+                            <i class="fas fa-square"></i> Vắng tất cả
+                        </button>
+                    </div>
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm sinh viên...">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">STT</th>
+                        <th style="width: 100px;">Mã SV</th>
+                        <th>Họ tên</th>
+                        <th>Lớp</th>
+                        <th style="width: 100px;">Trạng thái</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{var index = 1;}
+                    @foreach (var attendance in Model.Attendances)
+                    {
+                        <tr class="student-row @(attendance.IsPresent ? "table-success" : "table-danger")">
+                            <td class="text-center">@(index++)</td>
+                            <td>@attendance.Student.StudentCode</td>
+                            <td>@attendance.Student.FullName</td>
+                            <td>@attendance.Student.Class?.ClassName</td>
+                            <td class="text-center">
+                                <input type="hidden" name="attendances[@(index-2)].StudentId" value="@attendance.Student.Id" />
+                                <div class="form-check d-flex justify-content-center">
+                                    <input class="form-check-input attendance-checkbox" type="checkbox" 
+                                           name="attendances[@(index-2)].IsPresent" 
+                                           value="true"
+                                           @(attendance.IsPresent ? "checked" : "")
+                                           onchange="updateRowStyle(this)" />
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" 
+                                       name="attendances[@(index-2)].Note" 
+                                       value="@attendance.Note" 
+                                       placeholder="Nhập ghi chú..." />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-center mt-3">
+                <a asp-controller="Subject" asp-action="Detail" asp-route-id="@Model.SubjectId" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Lưu điểm danh
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function selectAll(checked) {
+            document.querySelectorAll('.attendance-checkbox').forEach(cb => {
+                cb.checked = checked;
+                updateRowStyle(cb);
+            });
+        }
+
+        function updateRowStyle(checkbox) {
+            const row = checkbox.closest('tr');
+            if (checkbox.checked) {
+                row.classList.add('table-success');
+                row.classList.remove('table-danger');
+            } else {
+                row.classList.add('table-danger');
+                row.classList.remove('table-success');
+            }
+        }
+
+        // Cập nhật style ban đầu cho các hàng
+        document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
+            updateRowStyle(checkbox);
+        });
+
+        // Tìm kiếm sinh viên
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            document.querySelectorAll('.student-row').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+    </script>
+} 

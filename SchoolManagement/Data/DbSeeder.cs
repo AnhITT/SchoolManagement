@@ -42,8 +42,6 @@ namespace SchoolManagement.Data
                     UserName = "admin@example.com",
                     Email = "admin@example.com",
                     FullName = "System Admin",
-                    DateBirthdayUser = new DateTime(1990, 1, 1),
-                    Role = "Admin",
                     EmailConfirmed = true
                 };
 
@@ -65,8 +63,6 @@ namespace SchoolManagement.Data
                     UserName = "teacher@example.com",
                     Email = "teacher@example.com",
                     FullName = "John Teacher",
-                    DateBirthdayUser = new DateTime(1985, 1, 1),
-                    Role = "Teacher",
                     EmailConfirmed = true
                 };
 
@@ -136,19 +132,35 @@ namespace SchoolManagement.Data
                 // Seed Sessions
                 var sessions = new List<Session>
                 {
-                    new Session {
+                    new Session
+                    {
                         SubjectId = subjects[0].Id,
-                        SessionDate = DateTime.Now.Date,
-                        Room = "A101",
-                        Description = "Buổi học Toán"
+                        SessionName = "Buổi 1",
+                        Date = DateTime.Now.AddDays(-1),
+                        StartTime = new TimeSpan(7, 0, 0),
+                        EndTime = new TimeSpan(10, 0, 0),
+                        Description = "Buổi học đầu tiên"
                     },
-                    new Session {
-                        SubjectId = subjects[1].Id,
-                        SessionDate = DateTime.Now.Date.AddDays(1),
-                        Room = "A102",
-                        Description = "Buổi học Vật Lý"
+                    new Session
+                    {
+                        SubjectId = subjects[0].Id,
+                        SessionName = "Buổi 2",
+                        Date = DateTime.Now.Date,
+                        StartTime = new TimeSpan(7, 0, 0),
+                        EndTime = new TimeSpan(10, 0, 0),
+                        Description = "Buổi học thứ hai"
+                    },
+                    new Session
+                    {
+                        SubjectId = subjects[0].Id,
+                        SessionName = "Buổi 3",
+                        Date = DateTime.Now.AddDays(1),
+                        StartTime = new TimeSpan(7, 0, 0),
+                        EndTime = new TimeSpan(10, 0, 0),
+                        Description = "Buổi học thứ ba"
                     }
                 };
+
                 context.Sessions.AddRange(sessions);
                 await context.SaveChangesAsync();
 
@@ -163,24 +175,27 @@ namespace SchoolManagement.Data
                 context.StudentSubjects.AddRange(studentSubjects);
                 await context.SaveChangesAsync();
 
-                // Seed some Attendance records
+                // Seed Attendances
                 var attendances = new List<Attendance>
                 {
-                    new Attendance {
+                    new Attendance
+                    {
+                        SessionId = sessions[0].Id,
                         StudentId = students[0].Id,
-                        SessionId = sessions[0].Id,
                         IsPresent = true,
-                        CheckTime = DateTime.Now,
-                        Note = "Đi học đúng giờ"
+                        Note = "Đi học đúng giờ",
+                        AttendanceTime = DateTime.Now
                     },
-                    new Attendance {
-                        StudentId = students[1].Id,
+                    new Attendance
+                    {
                         SessionId = sessions[0].Id,
+                        StudentId = students[1].Id,
                         IsPresent = false,
-                        CheckTime = DateTime.Now,
-                        Note = "Vắng có phép"
+                        Note = "Vắng có phép",
+                        AttendanceTime = DateTime.Now
                     }
                 };
+
                 context.Attendances.AddRange(attendances);
                 await context.SaveChangesAsync();
             }

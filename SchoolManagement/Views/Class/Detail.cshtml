@@ -1,0 +1,70 @@
+@model SchoolManagement.Models.Class
+@{
+    ViewData["Title"] = "Chi tiết lớp học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item h5">
+            <a asp-action="Index">
+                <i class="fas fa-graduation-cap"></i> Quản lý lớp học
+            </a>
+        </li>
+        <li class="breadcrumb-item h5">Chi tiết lớp học</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Thông tin lớp học</h4>
+        <dl class="row">
+            <dt class="col-sm-3">Mã lớp</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Tên lớp</dt>
+            <dd class="col-sm-9">@Model.ClassName</dd>
+
+            <dt class="col-sm-3">Mô tả</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Số sinh viên</dt>
+            <dd class="col-sm-9">@(Model.Students?.Count ?? 0)</dd>
+        </dl>
+
+        @if (Model.Students != null && Model.Students.Any())
+        {
+            <h5>Danh sách sinh viên trong lớp</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Họ và tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr>
+                            <td>@student.StudentCode</td>
+                            <td>@student.FullName</td>
+                            <td>@student.Email</td>
+                            <td>@student.Phone</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <div class="d-flex justify-content-center align-items-center">
+            <a class="btn btn-dark" asp-action="Index">
+                <i class="fa-solid fa-chevron-left"></i> Quay lại
+            </a>
+            <a class="btn btn-primary m-3" asp-action="Update" asp-route-id="@Model.Id">
+                <i class="fas fa-edit"></i> Chỉnh sửa
+            </a>
+        </div>
+    </div>
+</div> 
