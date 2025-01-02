@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="iq-breadcrumb-one iq-bg-over iq-over-dark-50">
+    <div class="container-fluid pb-5">
+        <div class="row align-items-center pb-5">
+            <div class="col-sm-12">
+                <nav aria-label="breadcrumb" class="text-center iq-breadcrumb-two">
+                    <ol class="breadcrumb main-bg">
+                        <li class="breadcrumb-item h3">You are not logged in</li>
+                        <li class="breadcrumb-item h3 active">Please login and register for a package to watch movies</li>
+                    </ol>
+                </nav>
+                <h2 class="d-flex justify-content-center"><a asp-action="Login" asp-controller="User" class="btn btn-outline-danger">Login</a></h2>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,153 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="content-page">
+    <div class="content">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <form class="d-flex">
+
+                            <a href="javascript: void(0);" class="btn btn-primary ms-2">
+                                <i class="mdi mdi-autorenew"></i>
+                            </a>
+                        </form>
+                    </div>
+                    <h4 class="page-title">Dashboard</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-arrow-bottom-right-thin-circle-outline widget-icon text-bg-warning text-bg-warning"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Tổng số bộ phim</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.countMovies
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-alert-octagon-outline widget-icon text-bg-warning text-bg-warning"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Products DeAct">Số phim lẻ</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.countMoviesOdd
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-account-cash widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Products Activate">Số phim bộ</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.countMoviesSeries
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-account-cash widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Products Activate">Phim có lượt xem nhiều nhất</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.top1
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-alert-octagon-outline widget-icon text-bg-warning text-bg-warning"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Products DeAct">Số diễn viên</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.countActor
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-currency-usd widget-icon text-bg-warning text-bg-warning"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Doanh thu</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.revenue $
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div style="padding-bottom: 50px" class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-account-multiple widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Số lượng tài khoản</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.countAccount
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div style="padding-bottom: 50px" class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-alert-octagon-outline widget-icon text-bg-warning text-bg-warning"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Số người đăng ký sử dụng dịch vụ</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.countAccountUseService
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <div class="col-4">
+                <div class="card widget-flat">
+                    <div style="padding-bottom: 50px" class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-account-cash widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Khách hàng đăng ký dịch vụ nhiều nhất</h5>
+                        <p class="mb-0 text-muted">
+                            @ViewBag.topUserPricing
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+        </div>
+
+    </div>
+</div>
+

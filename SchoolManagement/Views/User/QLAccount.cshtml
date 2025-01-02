@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SchoolManagement.Models.User>
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section style="padding-top: 30px" class="content">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="text-center">Danh sách tài khoản</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tên đăng nhập</th>
+                        <th>Tên</th>
+                        <th>Email</th>
+                        <th>Ngày sinh</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+
+                            <tr id="trow_@item.Id">
+                                <td>
+
+                                </td>
+                            </tr>
+
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">Không có phim nào!!!</td>
+                        </tr>
+                    }
+        </div>
+        </tbody>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,41 @@
+# Build Folders
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# Mac
+.DS_Store
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Coverage
+*.coverage
+*.coveragexml
+*.coveragejson
+*.opencover.xml
+
+# Others
+*.tmp
+*.temp
+*.bak
+*.swp 

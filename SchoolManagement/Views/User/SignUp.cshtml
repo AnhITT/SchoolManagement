@@ -1,0 +1,85 @@
+﻿@model SchoolManagement.Models.DTO.RegistrationDTO
+@{
+    ViewData["Title"] = "SignUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section style="max-height: 746px !important;" class="sign-in-page">
+    <div class="container">
+        <div class="row justify-content-center align-items-center height-self-center">
+            <div class="col-lg-7 col-md-12 align-self-center">
+                <div class="sign-user_card ">
+                    <div class="sign-in-page-data">
+                        <div class="sign-in-from w-100 m-auto">
+                            <h3 class="font-weight-bold mb-3 mt-3 text-center">SIGN UP</h3>
+                            @if (TempData["msg"] != null)
+                            {
+                                <div class="text-danger">@TempData["msg"]</div>
+                            }
+                            <form asp-action="SignUp" method="post">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <span class="text-danger" asp-validation-for="userName"></span>
+                                            <input asp-for="userName" type="text" class="form-control mb-0" id="exampleInputEmail2"
+                                                   placeholder="Enter Full Name" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <span class="text-danger" asp-validation-for="email"></span>
+                                            <input asp-for="email" type="email" class="form-control mb-0" id="exampleInputEmail3"
+                                                   placeholder="Enter email" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <span class="text-danger" asp-validation-for="password"></span>
+                                            <input asp-for="password" type="password" class="form-control mb-0"
+                                                   id="exampleInputPassword2" placeholder="Password">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Full Name</label>
+                                            <span class="text-danger" asp-validation-for="fullName"></span>
+                                            <input asp-for="fullName" type="text" class="form-control mb-0" id="exampleInputEmail2"
+                                                   placeholder="First Name" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Repeat Password</label>
+                                            <span class="text-danger" asp-validation-for="passwordConfirm"></span>
+                                            <input asp-for="passwordConfirm" type="password" class="form-control mb-0"
+                                                   id="exampleInputPassword2" placeholder="Password">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Date Of Birth</label>
+                                            <span class="text-danger" asp-validation-for="dateBirthday"></span>
+                                            <input asp-for="dateBirthday" type="date" class="form-control mb-0" id="exampleInputEmail3"
+                                                   autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sign-info text-center">
+                                    <button type="submit" class="btn btn-danger mt-2">Sign Up</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-center links">
+                            Already have an account? <a href="Login" class="text-primary ml-2">Sign In</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
